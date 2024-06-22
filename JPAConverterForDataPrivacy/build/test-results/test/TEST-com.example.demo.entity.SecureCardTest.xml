@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.demo.entity.SecureCardTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-06-22T08:15:24" hostname="chipmunk.local" time="0.331">
+  <properties/>
+  <testcase name="민감한 데이터는 마스킹된다." classname="com.example.demo.entity.SecureCardTest" time="0.236"/>
+  <testcase name="민감한 데이터는 암호화된다." classname="com.example.demo.entity.SecureCardTest" time="0.094"/>
+  <system-out><![CDATA[
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.1)
+
+2024-06-22T17:15:22.918+09:00  INFO 21137 --- [demo] [    Test worker] com.example.demo.entity.SecureCardTest   : Starting SecureCardTest using Java 17.0.11 with PID 21137 (started by gimseonjae in /Users/gimseonjae/Documents/Workspaces/blogRepository/JPAConverterForDataPrivacy)
+2024-06-22T17:15:22.920+09:00  INFO 21137 --- [demo] [    Test worker] com.example.demo.entity.SecureCardTest   : No active profile set, falling back to 1 default profile: "default"
+2024-06-22T17:15:23.102+09:00  INFO 21137 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-22T17:15:23.114+09:00  INFO 21137 --- [demo] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 JPA repository interfaces.
+2024-06-22T17:15:23.135+09:00  INFO 21137 --- [demo] [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2024-06-22T17:15:23.727+09:00  INFO 21137 --- [demo] [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:ccf084db-b27d-4474-b363-6828ba8d43f4;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2024-06-22T17:15:23.908+09:00  INFO 21137 --- [demo] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-22T17:15:23.943+09:00  INFO 21137 --- [demo] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-06-22T17:15:23.969+09:00  INFO 21137 --- [demo] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-06-22T17:15:24.055+09:00  INFO 21137 --- [demo] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-06-22T17:15:24.090+09:00  WARN 21137 --- [demo] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-06-22T17:15:24.491+09:00  INFO 21137 --- [demo] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: drop table if exists plain_card cascade 
+Hibernate: drop table if exists secure_card cascade 
+Hibernate: drop sequence if exists plain_card_seq
+Hibernate: drop sequence if exists secure_card_seq
+Hibernate: create sequence plain_card_seq start with 1 increment by 50
+Hibernate: create sequence secure_card_seq start with 1 increment by 50
+Hibernate: create table plain_card (id bigint not null, card_no varchar(255), holder_name varchar(255), primary key (id))
+Hibernate: create table secure_card (id bigint not null, card_no varchar(255), holder_name varchar(255), primary key (id))
+2024-06-22T17:15:24.511+09:00  INFO 21137 --- [demo] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-22T17:15:24.573+09:00  INFO 21137 --- [demo] [    Test worker] com.example.demo.entity.SecureCardTest   : Started SecureCardTest in 1.808 seconds (process running for 2.314)
+Hibernate: select next value for secure_card_seq
+Hibernate: insert into secure_card (card_no,holder_name,id) values (?,?,?)
+Hibernate: select sc1_0.id,sc1_0.card_no,sc1_0.holder_name from secure_card sc1_0 where sc1_0.id=?
+Hibernate: select next value for secure_card_seq
+Hibernate: insert into secure_card (card_no,holder_name,id) values (?,?,?)
+Hibernate: SELECT id, card_no, holder_name From secure_card WHERE id = ?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
