@@ -21,8 +21,8 @@ class CardMaskingConverterTest {
         @Test
         @DisplayName("데이터베이스 저장할 때 원문 그대로 저장합니다.")
         void shouldSaveOriginalWhenSave() throws Exception {
-            final String privacyData = "1234-5678-1234-5678";
-            final String expected = "1234-5678-1234-5678";
+            String privacyData = "1234-5678-1234-5678";
+            String expected = "1234-5678-1234-5678";
 
             String actual = cardMaskingConverter.convertToDatabaseColumn(privacyData);
 
@@ -36,10 +36,10 @@ class CardMaskingConverterTest {
         @Test
         @DisplayName("데이터베이스에서 불러올 때 카드 정보를 마스킹합니다.")
         void shouldMaskCardNoWhenLoad() throws Exception {
-            final String privacyData = "1234-5678-1234-5678";
-            final String expected = "1234-5678-****-****";
+            String privacyData = "1234-5678-1234-5678";
+            String expected = "1234-5678-****-****";
 
-            final String actual = cardMaskingConverter.convertToEntityAttribute(privacyData);
+            String actual = cardMaskingConverter.convertToEntityAttribute(privacyData);
 
             assertEquals(expected, actual);
         }
