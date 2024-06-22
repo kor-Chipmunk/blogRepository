@@ -25,7 +25,7 @@ class EncryptedConverterTest {
     class EncryptTest {
         @Test
         @DisplayName("데이터베이스 저장할 때 민감한 데이터를 암호화합니다.")
-        void shouldEncryptWhenPrivacyDataSave() throws Exception {
+        void shouldEncryptWhenSave() throws Exception {
             final String privacyData = "사적이고 민감한 데이터입니다.";
             final String expected = "dNd1dns21nAZpa2nxmaA590";
 
@@ -42,7 +42,7 @@ class EncryptedConverterTest {
     class DecryptTest {
         @Test
         @DisplayName("데이터베이스에서 불러올 때 암호화된 민감한 데이터를 복호화합니다.")
-        void shouldDecryptWhenPrivacyDataLoad() throws Exception {
+        void shouldDecryptWhenLoad() throws Exception {
             final String encrypted = "dNd1dns21nAZpa2nxmaA590";
             final String expected = "사적이고 민감한 데이터입니다.";
 

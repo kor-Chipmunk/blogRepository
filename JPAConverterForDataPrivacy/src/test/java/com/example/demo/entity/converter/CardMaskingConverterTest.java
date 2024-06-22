@@ -1,32 +1,30 @@
 package com.example.demo.entity.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class MaskingConverterTest {
+class CardMaskingConverterTest {
 
     @InjectMocks
-    private MaskingConverter maskingConverter;
+    private CardMaskingConverter cardMaskingConverter;
 
     @Nested
     @DisplayName("암호화")
     class EncryptTest {
         @Test
         @DisplayName("데이터베이스 저장할 때 원문 그대로 저장합니다.")
-        void shouldEncryptWhenPrivacyDataSave() throws Exception {
+        void shouldSaveOriginalWhenSave() throws Exception {
             final String privacyData = "1234-5678-1234-5678";
             final String expected = "1234-5678-1234-5678";
 
-            String actual = maskingConverter.convertToDatabaseColumn(privacyData);
+            String actual = cardMaskingConverter.convertToDatabaseColumn(privacyData);
 
             assertEquals(expected, actual);
         }
@@ -36,12 +34,12 @@ class MaskingConverterTest {
     @DisplayName("복호화")
     class DecryptTest {
         @Test
-        @DisplayName("데이터베이스에서 불러올 때 암호화된 민감한 데이터를 복호화합니다.")
-        void shouldDecryptWhenPrivacyDataLoad() throws Exception {
+        @DisplayName("데이터베이스에서 불러올 때 카드 정보를 마스킹합니다.")
+        void shouldMaskCardNoWhenLoad() throws Exception {
             final String privacyData = "1234-5678-1234-5678";
             final String expected = "1234-5678-****-****";
 
-            final String actual = maskingConverter.convertToEntityAttribute(privacyData);
+            final String actual = cardMaskingConverter.convertToEntityAttribute(privacyData);
 
             assertEquals(expected, actual);
         }

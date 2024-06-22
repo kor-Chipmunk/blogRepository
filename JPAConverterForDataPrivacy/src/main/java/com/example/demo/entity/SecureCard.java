@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.converter.EncryptedConverter;
-import com.example.demo.entity.converter.MaskingConverter;
+import com.example.demo.entity.converter.CardMaskingConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +23,6 @@ public class SecureCard {
     @Convert(converter = EncryptedConverter.class)
     private String holderName;
 
-    @Convert(converter = MaskingConverter.class)
+    @Convert(converter = CardMaskingConverter.class)
     private String cardNo;
 }

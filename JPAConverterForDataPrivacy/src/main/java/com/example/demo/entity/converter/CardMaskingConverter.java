@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Converter
-public class MaskingConverter implements AttributeConverter<String, String> {
+public class CardMaskingConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String raw) {
