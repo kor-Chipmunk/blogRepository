@@ -3,9 +3,7 @@ package com.example.demo.entity.converter;
 import com.example.demo.util.StringUtil;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Converter
 public class CardMaskingConverter implements AttributeConverter<String, String> {
 
