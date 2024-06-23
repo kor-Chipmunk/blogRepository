@@ -8,7 +8,7 @@ public final class StringUtil {
      * @param plain 마스킹할 문자열
      * @param inclusiveStartIndex 시작 위치 (포함)
      * @param exclusiveEndIndex 끝 위치 (포함 안됨)
-     * @return 마스킹된 이름
+     * @return 마스킹된 문자열
      */
     public static String mask(
             String plain,
