@@ -1,6 +1,6 @@
 # [JPA] 민감한 데이터 암호화 / 마스킹하기 (Attribute Converter, @Converter)
 
-[블로그 글](https://itchipmunk.tistory.com/)과 함께 합니다.
+[블로그 글](https://itchipmunk.tistory.com/618)과 함께 합니다.
 
 `Spring Data JPA` 에서 '**Attribute Converter**' 활용을 실습합니다.  
 JPA 속성 값과 데이터베이스 칼럼 사이의 표현을 정의합니다.  
