@@ -1,25 +1,23 @@
 package com.example.demo.entity;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
-import com.example.demo.config.DataJpaConfig;
 import com.example.demo.entity.converter.PrivacyEncryptor;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {DataJpaConfig.class})
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
-class SecureCardTest {
+class SecureCardEntityManagerTest {
     @Autowired
     private TestEntityManager entityManager;
 
@@ -36,6 +34,7 @@ class SecureCardTest {
         String expectedHolderName = "nAdnq1Ns0dxn02Snasx2nx";
 
         when(privacyEncryptor.encrypt(privacyHolderName)).thenReturn(expectedHolderName);
+        when(privacyEncryptor.decrypt(expectedHolderName)).thenReturn(privacyHolderName);
 
         // WHEN
         SecureCard secureCard = new SecureCard(null, privacyHolderName, privacyCardNo);
@@ -46,17 +45,16 @@ class SecureCardTest {
 
         EntityManager em = entityManager.getEntityManager();
 
-        // @Convert 피하기 위한 네이티브 쿼리
-        Query query = em.createNativeQuery(
-                "SELECT id, holder_name, card_no From secure_card WHERE id = :id",
-                SecureCardProjection.class);
+        TypedQuery<SecureCard> query = em.createQuery(
+                "SELECT id, holderName, cardNo From SecureCard WHERE id = :id",
+                SecureCard.class);
         query.setParameter("id", secureCard.getId());
-        SecureCardProjection actualCard = (SecureCardProjection) query.getSingleResult();
+        SecureCard actualCard = query.getSingleResult();
 
         // THEN
-        assertAll(() -> {
-            assertThat(actualCard).isNotNull();
-            assertThat(actualCard.holder_name).isEqualTo(expectedHolderName);
+        assertSoftly(it -> {
+            it.assertThat(actualCard).isNotNull();
+            it.assertThat(actualCard.getHolderName()).isEqualTo(expectedHolderName); // Failed. actual : 다람쥐
         });
     }
 

@@ -5,23 +5,20 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
-import com.example.demo.config.DataJpaConfig;
 import com.example.demo.entity.converter.PrivacyEncryptor;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {DataJpaConfig.class})
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
-class SecureCardTest {
+class SecureCardRepositoryTest {
     @Autowired
-    private TestEntityManager entityManager;
+    private CardRepository cardRepository;
 
     @MockBean
     private PrivacyEncryptor privacyEncryptor;
@@ -39,24 +36,14 @@ class SecureCardTest {
 
         // WHEN
         SecureCard secureCard = new SecureCard(null, privacyHolderName, privacyCardNo);
+        cardRepository.saveAndFlush(secureCard);
 
-        entityManager.persist(secureCard);
-        entityManager.flush();
-        entityManager.clear();
-
-        EntityManager em = entityManager.getEntityManager();
-
-        // @Convert 피하기 위한 네이티브 쿼리
-        Query query = em.createNativeQuery(
-                "SELECT id, holder_name, card_no From secure_card WHERE id = :id",
-                SecureCardProjection.class);
-        query.setParameter("id", secureCard.getId());
-        SecureCardProjection actualCard = (SecureCardProjection) query.getSingleResult();
+        SecureCard actualCard = cardRepository.findById(secureCard.getId()).orElse(null);
 
         // THEN
         assertAll(() -> {
             assertThat(actualCard).isNotNull();
-            assertThat(actualCard.holder_name).isEqualTo(expectedHolderName);
+            assertThat(actualCard.getHolderName()).isEqualTo(expectedHolderName); // Failed. actual : 다람쥐
         });
     }
 
@@ -71,16 +58,14 @@ class SecureCardTest {
 
         // WHEN
         SecureCard secureCard = new SecureCard(null, holderName, cardNo);
+        cardRepository.saveAndFlush(secureCard);
 
-        entityManager.persist(secureCard);
-        entityManager.flush();
-        entityManager.clear();
-
-        SecureCard actualCard = entityManager.find(SecureCard.class, secureCard.getId());
+        SecureCard actualCard = cardRepository.findById(secureCard.getId())
+                .orElse(null);
 
         // THEN
         assertSoftly(it -> {
-            it.assertThat(actualCard.getCardNo()).isEqualTo(expected);
+            it.assertThat(actualCard.getCardNo()).isEqualTo(expected); // Failed. actual : 1234-5678-1234-5678
         });
     }
 }
