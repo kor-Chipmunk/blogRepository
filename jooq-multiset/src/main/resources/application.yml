@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: jooq-multiset
+
+  datasource:
+    # allowMultiQueries ??? ?? (???? ? ?? ?? ??)
+    url: jdbc:mysql://localhost:3306/docker-hub?useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+    username: maintainer-chipmunk
+    password: lHoqmsVDCkp7V1QrVTvQPj6kYMAzQwOz
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jooq:
+    sql-dialect: mysql
+
+# jOOQ ?? ???? ?? ??
+logging:
+  level:
+    org:
+      jooq:
+        tools:
+          LoggerListener: DEBUG

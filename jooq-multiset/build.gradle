@@ -1,0 +1,85 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.3'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.jooq.jooq-codegen-gradle' version '3.19.19'
+}
+
+group = 'com.tistory.itchipmunk'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	SpringBootVersion = '3.4.3'
+	MySQLConnectorVersion = '9.2.0'
+	jOOQVersion = '3.20.2'
+}
+
+dependencies {
+	// Database Connector
+	runtimeOnly "com.mysql:mysql-connector-j:${MySQLConnectorVersion}"
+
+	// jOOQ
+	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+	implementation "org.jooq:jooq-meta:${jOOQVersion}"
+	implementation "org.jooq:jooq-codegen:${jOOQVersion}"
+	jooqCodegen "com.mysql:mysql-connector-j:${MySQLConnectorVersion}"
+
+	// Dev tools
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Testing
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+jooq {
+	configuration {
+		jdbc {
+			driver = 'com.mysql.cj.jdbc.Driver'
+			url = 'jdbc:mysql://localhost:3306/docker-hub?useSSL=false&serverTimezone=UTC'
+			user = 'maintainer-chipmunk'
+			password = 'lHoqmsVDCkp7V1QrVTvQPj6kYMAzQwOz'
+		}
+
+		generator {
+			database {
+				name = 'org.jooq.meta.mysql.MySQLDatabase'
+				includes = '.*'
+				excludes = ''
+				inputSchema = "docker-hub"
+			}
+			target {
+				packageName = 'com.tistory.itchipmunk.jooq_multiset'
+				directory = 'build/generated-src/jooq/main'  // default (can be omitted)
+			}
+		}
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs += 'build/generated-src/jooq/main'
+		}
+	}
+}
