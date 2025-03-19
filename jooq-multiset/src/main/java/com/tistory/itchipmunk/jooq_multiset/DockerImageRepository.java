@@ -39,28 +39,22 @@ public class DockerImageRepository {
     }
 
     public List<DockerImageModel> getDockerImagesPagination(int page, int pageSize) {
-        var baseTable = dsl.select(
-                        DOCKER_IMAGES.asterisk()
-                ).from(DOCKER_IMAGES)
-                .orderBy(DOCKER_IMAGES.ID.asc())
-                .limit(pageSize)
-                .offset((page - 1) * pageSize)
-                .asTable(DOCKER_IMAGES);
-
         var fetched = dsl.select(
-                        baseTable.asterisk(),
+                        DOCKER_IMAGES.asterisk(),
 
                         multiset(
                                 select(DOCKER_IMAGE_TAGS.asterisk())
                                         .from(DOCKER_IMAGE_TAGS)
-                                        .where(DOCKER_IMAGE_TAGS.DOCKER_IMAGE_ID.eq(baseTable.field("id").cast(Long.class)))
+                                        .where(DOCKER_IMAGE_TAGS.DOCKER_IMAGE_ID.eq(DOCKER_IMAGES.ID))
                         )
                                 .as("tags")
                                 .convertFrom(records -> records.map(
                                         record -> record.into(DockerImageTagModel.class))
                                 )
                 )
-                .from(baseTable)
+                .from(DOCKER_IMAGES)
+                .offset((page - 1) * pageSize)
+                .limit(pageSize)
                 .fetchInto(DockerImageModel.class);
 
         return fetched;
